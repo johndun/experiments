@@ -38,11 +38,37 @@ Merge changes to the main branch
 - Stage and commit all changes
 - Merge changes to the main branch
 
+## CR3: Data loader function
+
+Complete the following steps one at a time. If you run into any problems, stop your work and I will assist you.
+
+Initial setup
+- Create and checkout the dev branch.
+
+Setup
+- Create the `data` directory and the `data/__init__.py` file. 
+- Create `data/get_dataset.py` file.
+
+Implement `get_dataset` in `data/get_dataset.py`
+- Single string input `dataset_name_or_path`
+- Check to see if `dataset_name_or_path` is a local path, if so, load it locally using `datasets.load_from_disk`
+- Otherwise, load the dataset from the hub with `datasets.load_dataset`
+- Return the loaded dataset
+
+Verify functionality
+- In ipython, use `get_dataset` to load `test_data/tiny_mnist` and verify it contains 8 records per split
+- In ipython, use `get_dataset` to load `mnist` and verify the number of records
+
+Merge changes to the main branch
+- Stage and commit all changes
+- Merge changes to the main branch
+
+
 ## Prompt 4: Interactive exploration to figure out how to calculate the min and max pixel values of an image dataset
 
-One step at a time:
+Complete the following steps one at a time. If you run into any problems, stop your work and I will assist you.
 
-- Using ipython, initialize the test mnist dataset using `dataset.load_datasets("test_data/test_mnist")`
+- Using ipython, initialize the tiny mnist dataset using `dataset.load_from_disk("test_data/test_mnist")`
 - Use `torchvision.transforms.ToTensor` to transform the dataset to torch tensors 
 
 ## Prompt 4: Prepare to work on normalization function
