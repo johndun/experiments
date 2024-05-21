@@ -1,6 +1,6 @@
 ## Template
 
-Complete the following steps one at a time. If you run into any problems, stop your work and I will assist you. Do not use the PROJECT_PATH environment variable in any python scripts.
+Complete the following steps one at a time. Do not use the PROJECT_PATH environment variable in any python scripts.
 
 Checkout working branch
   - Create and checkout the dev branch.
@@ -64,19 +64,15 @@ Implement unit tests for `get_dataset` function
 - Run the tests with `pytest`
 
 
+## Interactive exploration to figure out how to calculate the min and max pixel values of an image dataset
 
+Complete the following steps one at a time. Do not use the PROJECT_PATH environment variable in any python scripts.
 
+Using ipython, import get_dataset from data.get_dataset and use it to initialize `test_data/tiny_mnist`
 
+Use the `torchvision.transforms.ToTensor` transform to update the `image` field to be a torch tensor.
+- Define a function that inputs a list of samples and use batched map function
 
-
-
-
-## Prompt 4: Interactive exploration to figure out how to calculate the min and max pixel values of an image dataset
-
-Complete the following steps one at a time. If you run into any problems, stop your work and I will assist you.
-
-- Using ipython, initialize the tiny mnist dataset using `dataset.load_from_disk("test_data/test_mnist")`
-- Use `torchvision.transforms.ToTensor` to transform the dataset to torch tensors 
 
 ## Prompt 4: Prepare to work on normalization function
 
