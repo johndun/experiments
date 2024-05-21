@@ -1,9 +1,20 @@
+## Template
+
+Complete the following steps one at a time. If you run into any problems, stop your work and I will assist you. Do not use the PROJECT_PATH environment variable in any python scripts.
+
+Checkout working branch
+  - Create and checkout the dev branch.
+
+{{instructions}}
+
+Merge changes to the main branch
+- Stage and commit all changes
+- Merge changes to the main branch
+
+
 ## CR1: Create tiny test datasets
 
-Complete the following steps one at a time. If you run into any problems, stop your work and I will assist you.
-
 Initial setup
-  - Create and checkout the dev branch.
   - Create the following directories at the top level of the project: test_data, scripts
 
 Create the `scripts/initialize_test_image_data.py` script
@@ -18,32 +29,14 @@ Verify functionality
 - Use the script to create `test_data/tiny_mnist`
 - Verify that the tiny_mnist dataset can be loaded in ipython and has 8 records in each split
 
-Merge changes to the main branch
-- Stage and commit all changes
-- Merge changes to the main branch
-
 ## CR2: Create tiny cifar20 dataset
-
-Complete the following steps one at a time. If you run into any problems, stop your work and I will assist you.
-
-Initial setup
-  - Create and checkout the dev branch.
 
 Create `test_data/tiny_cifar10` dataset
 - View the `scripts/initialize_test_image_data.py` script
 - Run the script with dataset_name =cifar10
 - Verify that the tiny_cifar10 dataset can be loaded in ipython
 
-Merge changes to the main branch
-- Stage and commit all changes
-- Merge changes to the main branch
-
 ## CR3: Data loader function
-
-Complete the following steps one at a time. If you run into any problems, stop your work and I will assist you.
-
-Initial setup
-- Create and checkout the dev branch.
 
 Setup
 - Create the `data` directory and the `data/__init__.py` file. 
@@ -59,29 +52,23 @@ Verify functionality
 - In ipython, use `get_dataset` to load `test_data/tiny_mnist` and verify it contains 8 records per split
 - In ipython, use `get_dataset` to load `mnist` and verify the number of records
 
-Merge changes to the main branch
-- Stage and commit all changes
-- Merge changes to the main branch
-
 ## CR4: `get_dataset` unit tests
-
-Complete the following steps one at a time. If you run into any problems, stop your work and I will assist you.
-
-Initial setup
-- Create and checkout the dev branch.
 
 Setup
 - Create the `tests` directory
 - View the `get_datasets` function in `data/get_datasets.py`
 
 Implement unit tests for `get_dataset` function
-- Test that `test_data/tiny_mnist` can be locally loaded 
+- Test that `test_data/tiny_mnist` can be locally loaded. 
 - Test that `mnist` can be loaded from the hub
 - Run the tests with `pytest`
 
-Merge changes to the main branch
-- Stage and commit all changes
-- Merge changes to the main branch
+
+
+
+
+
+
 
 
 ## Prompt 4: Interactive exploration to figure out how to calculate the min and max pixel values of an image dataset
