@@ -63,6 +63,26 @@ Merge changes to the main branch
 - Stage and commit all changes
 - Merge changes to the main branch
 
+## CR4: `get_dataset` unit tests
+
+Complete the following steps one at a time. If you run into any problems, stop your work and I will assist you.
+
+Initial setup
+- Create and checkout the dev branch.
+
+Setup
+- Create the `tests` directory
+- View the `get_datasets` function in `data/get_datasets.py`
+
+Implement unit tests for `get_dataset` function
+- Test that `test_data/tiny_mnist` can be locally loaded 
+- Test that `mnist` can be loaded from the hub
+- Run the tests with `pytest`
+
+Merge changes to the main branch
+- Stage and commit all changes
+- Merge changes to the main branch
+
 
 ## Prompt 4: Interactive exploration to figure out how to calculate the min and max pixel values of an image dataset
 
