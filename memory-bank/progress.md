@@ -1,10 +1,10 @@
 # Development Progress
 
-## Phase 1: Project Setup
+## Phase 1: Set Up Basic task-tracker Project
 
 - [x] Set up project structure and directories
 - [x] Initialize Vite + React + TypeScript project
-- [ ] Configure ESLint and Prettier
+- [x] Configure ESLint and Prettier
 - [ ] Set up CSS Modules or styled-components
 - [ ] Set up React Router with appropriate `basename`
 - [ ] Create initial landing page component
