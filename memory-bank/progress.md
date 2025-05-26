@@ -11,7 +11,7 @@
 
 ## Phase 2: GitHub Pages Deployment
 
-- [ ] Configure build scripts to output artifacts to `/docs/task-tracker`
+- [x] Configure build scripts to output artifacts to `/docs/task-tracker`
 - [ ] Set up GitHub Actions CI workflow for automatic builds and deployments
 - [ ] Verify deployment to GitHub Pages at `https://johndun.github.io/experiments/task-tracker/`
 

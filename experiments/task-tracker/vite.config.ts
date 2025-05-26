@@ -5,6 +5,9 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   base: '/experiments/task-tracker/',
+  build: {
+    outDir: '../../docs/task-tracker',
+  },
   css: {
     modules: {
       localsConvention: 'camelCase',
