@@ -7,7 +7,7 @@
 - [x] Configure ESLint and Prettier
 - [x] Set up CSS Modules or styled-components
 - [x] Set up React Router with appropriate `basename`
-- [ ] Create initial landing page component
+- [x] Create initial landing page component
 
 ## Phase 2: GitHub Pages Deployment
 
