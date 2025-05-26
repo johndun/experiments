@@ -28,9 +28,7 @@ export default function LandingPage() {
         </section>
 
         <div className={styles.actions}>
-          <button className={styles.primaryButton}>
-            Get Started
-          </button>
+          <button className={styles.primaryButton}>Get Started</button>
           <Link to="/about" className={styles.secondaryButton}>
             Learn More
           </Link>
