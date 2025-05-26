@@ -178,14 +178,18 @@
     <main role="main">
         <div class="container">
             <section class="welcome-section" aria-labelledby="welcome-heading">
-                <h2 id="welcome-heading">Welcome</h2>
-                <p>This is the landing page for the experiments repository. More content will be added in subsequent phases.</p>
+                <h2 id="welcome-heading">Welcome to the Experiments Repository</h2>
+                <p>A collection of experiments using Cline.</p>
             </section>
 
             <section aria-labelledby="experiments-heading">
-                <h2 id="experiments-heading" class="sr-only">Available Experiments</h2>
+                <h2 id="experiments-heading">Available Experiments</h2>
                 <div class="experiments-grid">
-                    <!-- Experiment cards will be added in subsequent phases -->
+                    <div class="experiment-card">
+                        <h3>Task Tracker</h3>
+                        <p>A demo application for organizing and tracking your daily tasks. Built with React, TypeScript, and Vite for a modern, responsive experience. Currently just a shell.</p>
+                        <a href="task-tracker/" class="experiment-link">Launch App</a>
+                    </div>
                 </div>
             </section>
         </div>
@@ -193,7 +197,8 @@
 
     <footer role="contentinfo">
         <div class="container">
-            <p>&copy; 2025 Experiments Repository</p>
+            <p>&copy; Experiments Repository |
+            <a href="https://github.com/johndun/experiments" style="color: var(--primary-color); text-decoration: none;">View on GitHub</a>
         </div>
     </footer>
 </body>

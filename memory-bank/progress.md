@@ -6,8 +6,8 @@
 - [x] Add proper DOCTYPE, meta tags, and viewport configuration
 
 ## Phase 2: Landing Page Content
-- [ ] Add header with "Experiments Repository" title
-- [ ] Include project description explaining the monorepo purpose
-- [ ] Create navigation section for available experiments
-- [ ] Add card/link for task-tracker experiment pointing to `/experiments/task-tracker/`
-- [ ] Include footer with repository information
+- [x] Add header with "Experiments Repository" title
+- [x] Include project description explaining the monorepo purpose
+- [x] Create navigation section for available experiments
+- [x] Add card/link for task-tracker experiment pointing to `/task-tracker/`
+- [x] Include footer with repository information
