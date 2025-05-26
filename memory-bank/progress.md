@@ -6,7 +6,7 @@
 - [x] Initialize Vite + React + TypeScript project
 - [x] Configure ESLint and Prettier
 - [x] Set up CSS Modules or styled-components
-- [ ] Set up React Router with appropriate `basename`
+- [x] Set up React Router with appropriate `basename`
 - [ ] Create initial landing page component
 
 ## Phase 2: GitHub Pages Deployment
