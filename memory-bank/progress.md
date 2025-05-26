@@ -5,7 +5,7 @@
 - [x] Set up project structure and directories
 - [x] Initialize Vite + React + TypeScript project
 - [x] Configure ESLint and Prettier
-- [ ] Set up CSS Modules or styled-components
+- [x] Set up CSS Modules or styled-components
 - [ ] Set up React Router with appropriate `basename`
 - [ ] Create initial landing page component
 
