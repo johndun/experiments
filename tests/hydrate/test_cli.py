@@ -5,8 +5,7 @@ import sys
 
 import pytest
 
-from hydrate.cli import HydrateArgs, get_input_path, validate_output
-from hydrate.errors import OutputExistsError
+from hydrate.cli import HydrateArgs, get_input_path
 
 
 class TestGetInputPath:
@@ -35,29 +34,6 @@ class TestGetInputPath:
         args = HydrateArgs()
         with pytest.raises(SystemExit):
             get_input_path(args)
-
-
-class TestValidateOutput:
-    def test_same_path_allowed(self, tmp_path):
-        file = tmp_path / "test.txt"
-        file.write_text("content")
-        validate_output(file, file)
-
-    def test_existing_output_raises(self, tmp_path):
-        input_file = tmp_path / "input.txt"
-        input_file.write_text("content")
-        output_file = tmp_path / "output.txt"
-        output_file.write_text("existing")
-
-        with pytest.raises(OutputExistsError):
-            validate_output(input_file, output_file)
-
-    def test_nonexistent_output_ok(self, tmp_path):
-        input_file = tmp_path / "input.txt"
-        input_file.write_text("content")
-        output_file = tmp_path / "output.txt"
-
-        validate_output(input_file, output_file)
 
 
 class TestCliIntegration:
@@ -132,12 +108,13 @@ class TestCliIntegration:
         assert result.returncode != 0
         assert "not found" in result.stderr
 
-    def test_output_exists_error(self, tmp_path):
+    def test_output_overwrite(self, tmp_path):
+        """Test that existing output files are overwritten."""
         input_file = tmp_path / "input.txt"
-        input_file.write_text("content")
+        input_file.write_text("new content")
 
         output_file = tmp_path / "output.txt"
-        output_file.write_text("existing")
+        output_file.write_text("existing content")
 
         result = subprocess.run(
             [
@@ -152,8 +129,8 @@ class TestCliIntegration:
             text=True,
         )
 
-        assert result.returncode != 0
-        assert "already exists" in result.stderr
+        assert result.returncode == 0
+        assert output_file.read_text() == "new content"
 
     def test_csv_conversion(self, tmp_path):
         csv_file = tmp_path / "data.csv"

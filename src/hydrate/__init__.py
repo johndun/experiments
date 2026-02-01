@@ -7,7 +7,6 @@ from hydrate.errors import (
     HydrateError,
     MaxDepthExceededError,
     MissingFileError,
-    OutputExistsError,
 )
 from hydrate.parser import hydrate_content, hydrate_file
 
@@ -22,5 +21,4 @@ __all__ = [
     "MissingFileError",
     "MaxDepthExceededError",
     "BinaryFileError",
-    "OutputExistsError",
 ]

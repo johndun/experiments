@@ -7,7 +7,7 @@ from typing import Annotated
 
 import tyro
 
-from hydrate.errors import HydrateError, OutputExistsError
+from hydrate.errors import HydrateError
 from hydrate.parser import hydrate_file
 
 
@@ -63,15 +63,6 @@ def get_input_path(args: HydrateArgs) -> Path:
     sys.exit(1)
 
 
-def validate_output(input_path: Path, output_path: Path) -> None:
-    """Validate that output won't accidentally overwrite existing files."""
-    if output_path.resolve() == input_path.resolve():
-        return
-
-    if output_path.exists():
-        raise OutputExistsError(output_path)
-
-
 def main() -> None:
     """Main entry point for the hydrate CLI."""
     args = tyro.cli(HydrateArgs)
@@ -83,7 +74,6 @@ def main() -> None:
         sys.exit(1)
 
     try:
-        validate_output(input_path, args.output)
         result = hydrate_file(input_path, max_depth=args.max_depth)
         args.output.write_text(result)
         print(f"Hydrated {input_path} -> {args.output}")

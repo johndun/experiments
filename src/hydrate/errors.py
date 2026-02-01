@@ -49,14 +49,3 @@ class BinaryFileError(HydrateError):
     def __init__(self, file_path: Path) -> None:
         self.file_path = file_path
         super().__init__(f"Cannot embed binary file: {file_path}")
-
-
-class OutputExistsError(HydrateError):
-    """Raised when output file already exists and would be overwritten."""
-
-    def __init__(self, output_path: Path) -> None:
-        self.output_path = output_path
-        super().__init__(
-            f"Output file already exists: {output_path}\n"
-            "Use the same path for input and output to update in-place."
-        )
