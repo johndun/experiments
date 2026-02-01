@@ -338,3 +338,73 @@ class TestGenerateImages:
         contents = call_args.kwargs["contents"]
         # Should be a list with just the prompt string
         assert contents == ["A simple prompt"]
+
+    def test_empty_candidates_raises(self, tmp_path):
+        with patch("nano_banana.generator.genai.Client") as mock_client_cls:
+            mock_client = MagicMock()
+            mock_client_cls.return_value = mock_client
+
+            mock_response = MagicMock()
+            mock_response.candidates = []
+            mock_response.prompt_feedback = "BLOCKED"
+
+            mock_client.models.generate_content.return_value = mock_response
+
+            output_path = tmp_path / "test.png"
+            args = NanoBananaArgs(
+                prompt="test",
+                out=output_path,
+                api_key="test-key",
+            )
+
+            with pytest.raises(RuntimeError, match="No candidates in response"):
+                generate_images(args)
+
+    def test_none_content_raises(self, tmp_path):
+        with patch("nano_banana.generator.genai.Client") as mock_client_cls:
+            mock_client = MagicMock()
+            mock_client_cls.return_value = mock_client
+
+            mock_response = MagicMock()
+            mock_candidate = MagicMock()
+            mock_candidate.content = None
+            mock_candidate.finish_reason = "SAFETY"
+            mock_candidate.safety_ratings = ["HARM_CATEGORY_DANGEROUS"]
+            mock_response.candidates = [mock_candidate]
+
+            mock_client.models.generate_content.return_value = mock_response
+
+            output_path = tmp_path / "test.png"
+            args = NanoBananaArgs(
+                prompt="test",
+                out=output_path,
+                api_key="test-key",
+            )
+
+            with pytest.raises(RuntimeError, match="No content in response"):
+                generate_images(args)
+
+    def test_none_parts_raises(self, tmp_path):
+        with patch("nano_banana.generator.genai.Client") as mock_client_cls:
+            mock_client = MagicMock()
+            mock_client_cls.return_value = mock_client
+
+            mock_response = MagicMock()
+            mock_candidate = MagicMock()
+            mock_candidate.content = MagicMock()
+            mock_candidate.content.parts = None
+            mock_candidate.finish_reason = "OTHER"
+            mock_candidate.safety_ratings = None
+            mock_response.candidates = [mock_candidate]
+
+            mock_client.models.generate_content.return_value = mock_response
+
+            output_path = tmp_path / "test.png"
+            args = NanoBananaArgs(
+                prompt="test",
+                out=output_path,
+                api_key="test-key",
+            )
+
+            with pytest.raises(RuntimeError, match="No content in response"):
+                generate_images(args)

@@ -81,8 +81,25 @@ def generate_images(args: NanoBananaArgs) -> list[str]:
             ),
         )
 
+        # Check for valid response
+        if not response.candidates:
+            block_reason = getattr(response, "prompt_feedback", None)
+            raise RuntimeError(
+                f"No candidates in response for image {i + 1}. "
+                f"Prompt feedback: {block_reason}"
+            )
+
+        candidate = response.candidates[0]
+        if candidate.content is None or candidate.content.parts is None:
+            finish_reason = getattr(candidate, "finish_reason", None)
+            safety_ratings = getattr(candidate, "safety_ratings", None)
+            raise RuntimeError(
+                f"No content in response for image {i + 1}. "
+                f"Finish reason: {finish_reason}, Safety ratings: {safety_ratings}"
+            )
+
         image_saved = False
-        for part in response.candidates[0].content.parts:
+        for part in candidate.content.parts:
             if part.inline_data is not None:
                 image_data = part.inline_data.data
                 image = Image.open(io.BytesIO(image_data))
