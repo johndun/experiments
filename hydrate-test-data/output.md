@@ -1,0 +1,62 @@
+# Monthly Report
+
+This document demonstrates the hydrate CLI with multiple embedded files.
+
+## User Directory
+
+The following table shows all registered users:
+
+| id | name | email | role |
+| --- | --- | --- | --- |
+| 1 | Alice Smith | alice@example.com | admin |
+| 2 | Bob Jones | bob@example.com | editor |
+| 3 | Charlie Brown | charlie@example.com | viewer |
+| 4 | Diana Prince | diana@example.com | admin |
+
+## Product Catalog
+
+Current inventory status:
+
+| sku | name | price | stock |
+| --- | --- | --- | --- |
+| SKU001 | Widget Pro | 29.99 | 150 |
+| SKU002 | Gadget Plus | 49.99 | 75 |
+| SKU003 | Gizmo Basic | 9.99 | 500 |
+| SKU004 | Thingamajig | 19.99 | 200 |
+
+## Recent Activity
+
+System events from the past period:
+
+| event | user | timestamp |
+| --- | --- | --- |
+| login | alice | 2024-01-15T10:30:00Z |
+| purchase | bob | 2024-01-15T11:45:00Z |
+| logout | alice | 2024-01-15T12:00:00Z |
+| signup | eve | 2024-01-15T14:20:00Z |
+
+## Test Image
+
+The following image tests mdview's image rendering capability:
+
+![Test Pattern](test-image.png)
+
+## Additional Information
+
+## Important Notes
+
+- All prices are in USD
+- Stock levels updated daily at midnight
+- Contact support@example.com for questions
+
+### Changelog
+
+- **v1.2**: Added new product categories
+- **v1.1**: Fixed pricing display bug
+- **v1.0**: Initial release
+
+
+---
+
+*This report was auto-generated. Data may be subject to change without notice.*
+

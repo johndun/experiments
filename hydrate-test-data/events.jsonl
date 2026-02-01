@@ -1,0 +1,4 @@
+{"event": "login", "user": "alice", "timestamp": "2024-01-15T10:30:00Z"}
+{"event": "purchase", "user": "bob", "timestamp": "2024-01-15T11:45:00Z"}
+{"event": "logout", "user": "alice", "timestamp": "2024-01-15T12:00:00Z"}
+{"event": "signup", "user": "eve", "timestamp": "2024-01-15T14:20:00Z"}
