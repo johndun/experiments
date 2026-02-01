@@ -1,5 +1,5 @@
 ---
-name: workflows
+name: workflows-cli
 description: Track progress on long-running tasks using workflow YAML files
 ---
 
