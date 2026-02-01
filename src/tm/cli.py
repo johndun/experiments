@@ -12,6 +12,7 @@ from tm.workflow import (
     close_tasks,
     get_effective_skills,
     get_ready_tasks,
+    is_workflow_complete,
     load_workflow,
     reset_workflow,
     save_workflow,
@@ -54,14 +55,23 @@ def get_workflow_path(provided: Path | None) -> Path | None:
     return get_active_workflow()
 
 
-def print_ready_tasks(workflow_path: Path) -> None:
-    """Load workflow and print ready tasks in consolidated view."""
+def print_ready_tasks(workflow_path: Path) -> bool:
+    """Load workflow and print ready tasks in consolidated view.
+
+    Returns True if workflow is complete, False otherwise.
+    """
     workflow = load_workflow(workflow_path)
+
+    # Check if workflow is complete
+    if is_workflow_complete(workflow):
+        print("Workflow complete!")
+        return True
+
     ready = get_ready_tasks(workflow)
 
     if not ready:
         print("No ready tasks.")
-        return
+        return False
 
     print(f"Ready tasks ({len(ready)}):")
     print()
@@ -86,6 +96,8 @@ def print_ready_tasks(workflow_path: Path) -> None:
             print(f"  skills: {skills_str}")
 
         print()
+
+    return False
 
 
 def handle_ready(cmd: ReadyCmd) -> int:

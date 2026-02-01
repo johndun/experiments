@@ -184,6 +184,14 @@ def validate_task_ids(workflow: Workflow, task_ids: list[str]) -> list[str]:
     return [tid for tid in task_ids if tid not in all_ids]
 
 
+def is_workflow_complete(workflow: Workflow) -> bool:
+    """Check if all stories in the workflow are complete."""
+    if not workflow.stories:
+        return True
+    closed_stories = set(workflow.status.closed_stories)
+    return all(story.id in closed_stories for story in workflow.stories)
+
+
 def get_effective_skills(story: Story, task: Task) -> list[str]:
     """Get effective skills for a task, including inherited skills from parent story.
 

@@ -11,6 +11,7 @@ from tm.workflow import (
     get_all_task_ids,
     get_effective_skills,
     get_ready_tasks,
+    is_workflow_complete,
     load_workflow,
     reset_workflow,
     save_workflow,
@@ -336,6 +337,29 @@ class TestValidateTaskIds:
         """Test with all invalid IDs."""
         invalid = validate_task_ids(sample_workflow, ["foo", "bar"])
         assert invalid == ["foo", "bar"]
+
+
+class TestIsWorkflowComplete:
+    """Tests for is_workflow_complete function."""
+
+    def test_incomplete_workflow(self, sample_workflow):
+        """Test workflow with open stories."""
+        assert is_workflow_complete(sample_workflow) is False
+
+    def test_complete_workflow(self, sample_workflow):
+        """Test workflow with all stories closed."""
+        sample_workflow.status.closed_stories = ["story1", "story2"]
+        assert is_workflow_complete(sample_workflow) is True
+
+    def test_partial_complete_workflow(self, sample_workflow):
+        """Test workflow with some stories closed."""
+        sample_workflow.status.closed_stories = ["story1"]
+        assert is_workflow_complete(sample_workflow) is False
+
+    def test_empty_workflow_is_complete(self):
+        """Test that empty workflow is considered complete."""
+        workflow = Workflow()
+        assert is_workflow_complete(workflow) is True
 
 
 class TestGetEffectiveSkills:

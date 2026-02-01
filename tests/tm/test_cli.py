@@ -194,6 +194,28 @@ stories:
         captured = capsys.readouterr()
         assert "skills: python, pytest" in captured.out
 
+    def test_ready_shows_workflow_complete(self, temp_dir, capsys):
+        """Test that ready shows workflow complete message."""
+        workflow_path = temp_dir / "workflow.yaml"
+        workflow_path.write_text("""
+stories:
+  - id: story1
+    title: Story 1
+    tasks:
+      - id: task1
+        title: Task 1
+status:
+  closed_tasks:
+    - task1
+  closed_stories:
+    - story1
+""")
+        cmd = ReadyCmd(workflow=workflow_path)
+        handle_ready(cmd)
+
+        captured = capsys.readouterr()
+        assert "Workflow complete!" in captured.out
+
 
 class TestHandleReset:
     """Tests for handle_reset function."""
@@ -334,3 +356,24 @@ stories:
         assert exit_code == 0
         captured = capsys.readouterr()
         assert "Completed stories: story1" in captured.out
+
+    def test_close_shows_workflow_complete(self, temp_dir, capsys):
+        """Test that closing last tasks shows workflow complete."""
+        workflow_path = temp_dir / "workflow.yaml"
+        workflow_path.write_text("""
+stories:
+  - id: story1
+    title: Story 1
+    tasks:
+      - id: task1
+        title: Task 1
+""")
+
+        config_path = temp_dir / CONFIG_FILENAME
+        config_path.write_text(json.dumps({"active_workflow": str(workflow_path)}))
+
+        cmd = CloseCmd(task_ids=("task1",))
+        handle_close(cmd)
+
+        captured = capsys.readouterr()
+        assert "Workflow complete!" in captured.out
