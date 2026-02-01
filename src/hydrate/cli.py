@@ -40,7 +40,7 @@ class HydrateArgs:
     ] = Path("-")
     """Output file path. Use same path as input for in-place update."""
 
-    max_depth: int = 10
+    max_depth: int = 5
     """Maximum recursion depth for nested embeds."""
 
 
