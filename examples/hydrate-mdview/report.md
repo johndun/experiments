@@ -26,6 +26,8 @@ The following image tests mdview's image rendering capability:
 
 ![Test Pattern](test-image.png)
 
+{{math.md}}
+
 ## Additional Information
 
 {{notes.md}}
