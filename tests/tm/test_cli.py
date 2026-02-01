@@ -133,18 +133,6 @@ stories:
     tasks:
       - id: task1
         title: Task 1
-status:
-  closed_tasks:
-    - task1
-""")
-        # Need a task that shows blocked_by but is ready
-        workflow_path.write_text("""
-stories:
-  - id: story1
-    title: Story 1
-    tasks:
-      - id: task1
-        title: Task 1
       - id: task2
         title: Task 2
         blocked_by:
@@ -157,7 +145,46 @@ status:
         handle_ready(cmd)
 
         captured = capsys.readouterr()
-        assert "(after: task1)" in captured.out
+        assert "blocked_by: task1" in captured.out
+
+    def test_ready_shows_description(self, temp_dir, capsys):
+        """Test that description is shown in output."""
+        workflow_path = temp_dir / "workflow.yaml"
+        workflow_path.write_text("""
+stories:
+  - id: story1
+    title: Story 1
+    tasks:
+      - id: task1
+        title: Task 1
+        description: This is a detailed description
+""")
+        cmd = ReadyCmd(workflow=workflow_path)
+        handle_ready(cmd)
+
+        captured = capsys.readouterr()
+        assert "This is a detailed description" in captured.out
+
+    def test_ready_shows_skills(self, temp_dir, capsys):
+        """Test that skills are shown in output."""
+        workflow_path = temp_dir / "workflow.yaml"
+        workflow_path.write_text("""
+stories:
+  - id: story1
+    title: Story 1
+    skills:
+      - python
+    tasks:
+      - id: task1
+        title: Task 1
+        skills:
+          - pytest
+""")
+        cmd = ReadyCmd(workflow=workflow_path)
+        handle_ready(cmd)
+
+        captured = capsys.readouterr()
+        assert "skills: python, pytest" in captured.out
 
 
 class TestHandleReset:

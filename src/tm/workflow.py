@@ -21,6 +21,7 @@ def load_workflow(path: Path) -> Workflow:
                 title=task_data.get("title", ""),
                 description=task_data.get("description", ""),
                 blocked_by=task_data.get("blocked_by", []),
+                skills=task_data.get("skills", []),
             )
             tasks.append(task)
 
@@ -29,6 +30,7 @@ def load_workflow(path: Path) -> Workflow:
             title=story_data.get("title", ""),
             description=story_data.get("description", ""),
             tasks=tasks,
+            skills=story_data.get("skills", []),
         )
         stories.append(story)
 
@@ -61,6 +63,8 @@ def save_workflow(workflow: Workflow, path: Path) -> None:
         }
         if story.description:
             story_dict["description"] = story.description
+        if story.skills:
+            story_dict["skills"] = story.skills
 
         tasks_data = []
         for task in story.tasks:
@@ -72,6 +76,8 @@ def save_workflow(workflow: Workflow, path: Path) -> None:
                 task_dict["description"] = task.description
             if task.blocked_by:
                 task_dict["blocked_by"] = task.blocked_by
+            if task.skills:
+                task_dict["skills"] = task.skills
             tasks_data.append(task_dict)
 
         if tasks_data:
@@ -176,3 +182,26 @@ def validate_task_ids(workflow: Workflow, task_ids: list[str]) -> list[str]:
     """Return list of invalid task IDs."""
     all_ids = get_all_task_ids(workflow)
     return [tid for tid in task_ids if tid not in all_ids]
+
+
+def get_effective_skills(story: Story, task: Task) -> list[str]:
+    """Get effective skills for a task, including inherited skills from parent story.
+
+    Returns deduplicated list with story skills first, then task-specific skills.
+    """
+    seen = set()
+    result = []
+
+    # Story skills first
+    for skill in story.skills:
+        if skill not in seen:
+            seen.add(skill)
+            result.append(skill)
+
+    # Task skills second
+    for skill in task.skills:
+        if skill not in seen:
+            seen.add(skill)
+            result.append(skill)
+
+    return result

@@ -10,6 +10,7 @@ import tyro
 from tm.config import get_active_workflow, set_active_workflow
 from tm.workflow import (
     close_tasks,
+    get_effective_skills,
     get_ready_tasks,
     load_workflow,
     reset_workflow,
@@ -54,7 +55,7 @@ def get_workflow_path(provided: Path | None) -> Path | None:
 
 
 def print_ready_tasks(workflow_path: Path) -> None:
-    """Load workflow and print ready tasks."""
+    """Load workflow and print ready tasks in consolidated view."""
     workflow = load_workflow(workflow_path)
     ready = get_ready_tasks(workflow)
 
@@ -65,24 +66,25 @@ def print_ready_tasks(workflow_path: Path) -> None:
     print(f"Ready tasks ({len(ready)}):")
     print()
 
-    # Group by story
-    stories_with_tasks: dict[str, list] = {}
-    story_titles: dict[str, str] = {}
-
     for story, task in ready:
-        if story.id not in stories_with_tasks:
-            stories_with_tasks[story.id] = []
-            story_titles[story.id] = story.title
-        stories_with_tasks[story.id].append(task)
+        # Task header with id and title
+        print(f"[{task.id}] {task.title}")
 
-    for story_id, tasks in stories_with_tasks.items():
-        print(f"[{story_id}] {story_titles[story_id]}")
-        for task in tasks:
-            suffix = ""
-            if task.blocked_by:
-                blockers = ", ".join(task.blocked_by)
-                suffix = f" (after: {blockers})"
-            print(f"  [{task.id}] {task.title}{suffix}")
+        # Description (if present)
+        if task.description:
+            print(f"  {task.description}")
+
+        # Blocked by (if present)
+        if task.blocked_by:
+            blockers = ", ".join(task.blocked_by)
+            print(f"  blocked_by: {blockers}")
+
+        # Skills (inherited from story + task-specific)
+        effective_skills = get_effective_skills(story, task)
+        if effective_skills:
+            skills_str = ", ".join(effective_skills)
+            print(f"  skills: {skills_str}")
+
         print()
 
 

@@ -9,6 +9,7 @@ from tm.models import Story, Task, Workflow, WorkflowStatus
 from tm.workflow import (
     close_tasks,
     get_all_task_ids,
+    get_effective_skills,
     get_ready_tasks,
     load_workflow,
     reset_workflow,
@@ -116,6 +117,28 @@ stories: []
         assert workflow.stories == []
         assert workflow.status.closed_tasks == []
 
+    def test_load_workflow_with_skills(self):
+        """Test loading workflow with skills on stories and tasks."""
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
+            f.write("""
+stories:
+  - id: story1
+    title: Story 1
+    skills:
+      - python
+      - testing
+    tasks:
+      - id: task1
+        title: Task 1
+        skills:
+          - pytest
+""")
+            f.flush()
+            workflow = load_workflow(Path(f.name))
+
+        assert workflow.stories[0].skills == ["python", "testing"]
+        assert workflow.stories[0].tasks[0].skills == ["pytest"]
+
 
 class TestSaveWorkflow:
     """Tests for save_workflow function."""
@@ -157,6 +180,30 @@ class TestSaveWorkflow:
         loaded = load_workflow(path)
 
         assert loaded.status.closed_tasks == ["task1"]
+
+    def test_save_with_skills(self):
+        """Test saving workflow with skills on stories and tasks."""
+        workflow = Workflow(
+            stories=[
+                Story(
+                    id="story1",
+                    title="Story 1",
+                    skills=["python", "testing"],
+                    tasks=[
+                        Task(id="task1", title="Task 1", skills=["pytest"]),
+                    ],
+                ),
+            ],
+        )
+
+        with tempfile.NamedTemporaryFile(mode="w", suffix=".yaml", delete=False) as f:
+            path = Path(f.name)
+
+        save_workflow(workflow, path)
+        loaded = load_workflow(path)
+
+        assert loaded.stories[0].skills == ["python", "testing"]
+        assert loaded.stories[0].tasks[0].skills == ["pytest"]
 
 
 class TestGetAllTaskIds:
@@ -289,3 +336,49 @@ class TestValidateTaskIds:
         """Test with all invalid IDs."""
         invalid = validate_task_ids(sample_workflow, ["foo", "bar"])
         assert invalid == ["foo", "bar"]
+
+
+class TestGetEffectiveSkills:
+    """Tests for get_effective_skills function."""
+
+    def test_task_only_skills(self):
+        """Test task with skills but story without."""
+        story = Story(id="story1", title="Story 1", skills=[])
+        task = Task(id="task1", title="Task 1", skills=["python", "testing"])
+
+        skills = get_effective_skills(story, task)
+        assert skills == ["python", "testing"]
+
+    def test_story_only_skills(self):
+        """Test story with skills but task without."""
+        story = Story(id="story1", title="Story 1", skills=["python", "testing"])
+        task = Task(id="task1", title="Task 1", skills=[])
+
+        skills = get_effective_skills(story, task)
+        assert skills == ["python", "testing"]
+
+    def test_inherited_skills(self):
+        """Test task inherits skills from story."""
+        story = Story(id="story1", title="Story 1", skills=["python", "testing"])
+        task = Task(id="task1", title="Task 1", skills=["pytest"])
+
+        skills = get_effective_skills(story, task)
+        # Story skills come first, then task-specific skills
+        assert skills == ["python", "testing", "pytest"]
+
+    def test_duplicate_skills_deduplicated(self):
+        """Test that duplicate skills are deduplicated."""
+        story = Story(id="story1", title="Story 1", skills=["python", "testing"])
+        task = Task(id="task1", title="Task 1", skills=["testing", "pytest"])
+
+        skills = get_effective_skills(story, task)
+        # "testing" appears in both, should only appear once
+        assert skills == ["python", "testing", "pytest"]
+
+    def test_no_skills(self):
+        """Test when neither story nor task has skills."""
+        story = Story(id="story1", title="Story 1", skills=[])
+        task = Task(id="task1", title="Task 1", skills=[])
+
+        skills = get_effective_skills(story, task)
+        assert skills == []

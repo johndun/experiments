@@ -11,6 +11,7 @@ class Task:
     title: str
     description: str = ""
     blocked_by: list[str] = field(default_factory=list)
+    skills: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -21,6 +22,7 @@ class Story:
     title: str
     description: str = ""
     tasks: list[Task] = field(default_factory=list)
+    skills: list[str] = field(default_factory=list)
 
 
 @dataclass

@@ -10,6 +10,7 @@ def test_task_creation():
     assert task.title == "Test Task"
     assert task.description == ""
     assert task.blocked_by == []
+    assert task.skills == []
 
 
 def test_task_with_blocked_by():
@@ -24,6 +25,16 @@ def test_task_with_blocked_by():
     assert task.blocked_by == ["task1"]
 
 
+def test_task_with_skills():
+    """Test creating a task with skills."""
+    task = Task(
+        id="task1",
+        title="Skilled Task",
+        skills=["python", "testing"],
+    )
+    assert task.skills == ["python", "testing"]
+
+
 def test_story_creation():
     """Test creating a story with defaults."""
     story = Story(id="story1", title="Test Story")
@@ -31,6 +42,7 @@ def test_story_creation():
     assert story.title == "Test Story"
     assert story.description == ""
     assert story.tasks == []
+    assert story.skills == []
 
 
 def test_story_with_tasks():
@@ -48,6 +60,16 @@ def test_story_with_tasks():
     assert len(story.tasks) == 2
     assert story.tasks[0].id == "task1"
     assert story.tasks[1].blocked_by == ["task1"]
+
+
+def test_story_with_skills():
+    """Test creating a story with skills."""
+    story = Story(
+        id="story1",
+        title="Skilled Story",
+        skills=["frontend", "react"],
+    )
+    assert story.skills == ["frontend", "react"]
 
 
 def test_workflow_status_defaults():
