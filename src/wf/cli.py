@@ -7,8 +7,8 @@ from typing import Annotated
 
 import tyro
 
-from tm.config import get_active_workflow, set_active_workflow
-from tm.workflow import (
+from wf.config import get_active_workflow, set_active_workflow
+from wf.workflow import (
     close_tasks,
     get_effective_skills,
     get_ready_tasks,
@@ -109,7 +109,7 @@ def handle_ready(cmd: ReadyCmd) -> int:
             "Error: No workflow specified and no active workflow set.",
             file=sys.stderr,
         )
-        print("Usage: tm ready path/to/workflow.yaml", file=sys.stderr)
+        print("Usage: wf ready path/to/workflow.yaml", file=sys.stderr)
         return 1
 
     if not workflow_path.exists():
@@ -134,7 +134,7 @@ def handle_reset(cmd: ResetCmd) -> int:
             "Error: No workflow specified and no active workflow set.",
             file=sys.stderr,
         )
-        print("Usage: tm reset path/to/workflow.yaml", file=sys.stderr)
+        print("Usage: wf reset path/to/workflow.yaml", file=sys.stderr)
         return 1
 
     if not workflow_path.exists():
@@ -155,14 +155,14 @@ def handle_close(cmd: CloseCmd) -> int:
     """Handle the close command."""
     if not cmd.task_ids:
         print("Error: No task IDs provided.", file=sys.stderr)
-        print("Usage: tm close task1 task2 ...", file=sys.stderr)
+        print("Usage: wf close task1 task2 ...", file=sys.stderr)
         return 1
 
     workflow_path = get_active_workflow()
 
     if workflow_path is None:
         print("Error: No active workflow set.", file=sys.stderr)
-        print("Run 'tm ready path/to/workflow.yaml' first.", file=sys.stderr)
+        print("Run 'wf ready path/to/workflow.yaml' first.", file=sys.stderr)
         return 1
 
     if not workflow_path.exists():

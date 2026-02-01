@@ -1,4 +1,4 @@
-"""Tests for tm.config module."""
+"""Tests for wf.config module."""
 
 import json
 import os
@@ -7,9 +7,9 @@ from pathlib import Path
 
 import pytest
 
-from tm.config import (
+from wf.config import (
     CONFIG_FILENAME,
-    TmConfig,
+    WfConfig,
     get_active_workflow,
     get_config_path,
     load_config,
@@ -28,18 +28,18 @@ def temp_dir():
         os.chdir(original_dir)
 
 
-class TestTmConfig:
-    """Tests for TmConfig dataclass."""
+class TestWfConfig:
+    """Tests for WfConfig dataclass."""
 
     def test_defaults(self):
         """Test default values."""
-        config = TmConfig()
+        config = WfConfig()
         assert config.active_workflow is None
         assert config.extra == {}
 
     def test_with_values(self):
         """Test with provided values."""
-        config = TmConfig(
+        config = WfConfig(
             active_workflow="/path/to/workflow.yaml",
             extra={"custom": "value"},
         )
@@ -97,7 +97,7 @@ class TestSaveConfig:
 
     def test_save_creates_file(self, temp_dir):
         """Test that save creates the config file."""
-        config = TmConfig(active_workflow="/path/to/workflow.yaml")
+        config = WfConfig(active_workflow="/path/to/workflow.yaml")
         save_config(config)
 
         config_path = temp_dir / CONFIG_FILENAME
@@ -109,7 +109,7 @@ class TestSaveConfig:
 
     def test_save_preserves_extra(self, temp_dir):
         """Test that extra keys are preserved on save."""
-        config = TmConfig(
+        config = WfConfig(
             active_workflow="/path/to/workflow.yaml",
             extra={"custom": "value"},
         )

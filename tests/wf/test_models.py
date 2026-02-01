@@ -1,6 +1,6 @@
-"""Tests for tm.models module."""
+"""Tests for wf.models module."""
 
-from tm.models import Story, Task, Workflow, WorkflowStatus
+from wf.models import Story, Task, Workflow, WorkflowStatus
 
 
 def test_task_creation():

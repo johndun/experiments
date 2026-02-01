@@ -1,9 +1,9 @@
 ---
-name: tm
+name: workflows
 description: Track progress on long-running tasks using workflow YAML files
 ---
 
-# tm (Task Manager)
+# wf (Workflow Manager)
 
 A CLI tool for tracking progress on long-running tasks using workflow YAML files.
 
@@ -12,7 +12,7 @@ A CLI tool for tracking progress on long-running tasks using workflow YAML files
 ### Show Ready Tasks
 
 ```bash
-tm ready path/to/workflow.yaml
+wf ready path/to/workflow.yaml
 ```
 
 Shows all unblocked open tasks and sets the workflow as active.
@@ -20,15 +20,15 @@ Shows all unblocked open tasks and sets the workflow as active.
 ### Close Tasks
 
 ```bash
-tm close task1 task2 ...
+wf close task1 task2 ...
 ```
 
-Closes the specified tasks and shows the next ready tasks. Requires an active workflow (set via `tm ready`).
+Closes the specified tasks and shows the next ready tasks. Requires an active workflow (set via `wf ready`).
 
 ### Reset Workflow
 
 ```bash
-tm reset path/to/workflow.yaml
+wf reset path/to/workflow.yaml
 ```
 
 Resets all task and story statuses, clearing `closed_tasks` and `closed_stories`.
@@ -108,7 +108,7 @@ stories:
 ### Start working on the workflow
 
 ```bash
-tm ready project-workflow.yaml
+wf ready project-workflow.yaml
 ```
 
 Output:
@@ -125,7 +125,7 @@ Ready tasks (2):
 ### Close a task
 
 ```bash
-tm close user-model
+wf close user-model
 ```
 
 Output:
@@ -145,25 +145,25 @@ Ready tasks (3):
 ### Close multiple tasks
 
 ```bash
-tm close register login setup-routes
+wf close register login setup-routes
 ```
 
 ### Reset progress
 
 ```bash
-tm reset project-workflow.yaml
+wf reset project-workflow.yaml
 ```
 
 ## Behavior
 
 - **Ready tasks**: A task is ready when it's not closed and all its `blocked_by` dependencies are closed
 - **Auto-close stories**: When all tasks in a story are closed, the story is automatically marked as closed
-- **Active workflow**: The `ready` command sets a `.tm.json` config file to track the active workflow, so `close` doesn't need the workflow path
+- **Active workflow**: The `ready` command sets a `.wf.json` config file to track the active workflow, so `close` doesn't need the workflow path
 - **Preserves unknown keys**: Any extra YAML keys in your workflow file are preserved when saving
 
 ## Config File
 
-The tool creates a `.tm.json` file in the current directory to track the active workflow:
+The tool creates a `.wf.json` file in the current directory to track the active workflow:
 
 ```json
 {

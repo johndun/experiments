@@ -1,12 +1,12 @@
-"""Tests for tm.workflow module."""
+"""Tests for wf.workflow module."""
 
 import tempfile
 from pathlib import Path
 
 import pytest
 
-from tm.models import Story, Task, Workflow, WorkflowStatus
-from tm.workflow import (
+from wf.models import Story, Task, Workflow, WorkflowStatus
+from wf.workflow import (
     close_tasks,
     get_all_task_ids,
     get_effective_skills,

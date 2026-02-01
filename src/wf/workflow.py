@@ -4,7 +4,7 @@ from pathlib import Path
 
 import yaml
 
-from tm.models import Story, Task, Workflow, WorkflowStatus
+from wf.models import Story, Task, Workflow, WorkflowStatus
 
 
 def load_workflow(path: Path) -> Workflow:

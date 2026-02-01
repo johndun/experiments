@@ -4,12 +4,12 @@ import json
 from dataclasses import dataclass, field
 from pathlib import Path
 
-CONFIG_FILENAME = ".tm.json"
+CONFIG_FILENAME = ".wf.json"
 
 
 @dataclass
-class TmConfig:
-    """Configuration for tm CLI."""
+class WfConfig:
+    """Configuration for wf CLI."""
 
     active_workflow: str | None = None
     extra: dict = field(default_factory=dict)
@@ -20,12 +20,12 @@ def get_config_path() -> Path:
     return Path.cwd() / CONFIG_FILENAME
 
 
-def load_config() -> TmConfig:
-    """Load config from .tm.json file."""
+def load_config() -> WfConfig:
+    """Load config from .wf.json file."""
     config_path = get_config_path()
 
     if not config_path.exists():
-        return TmConfig()
+        return WfConfig()
 
     with open(config_path) as f:
         data = json.load(f)
@@ -34,11 +34,11 @@ def load_config() -> TmConfig:
     known_keys = {"active_workflow"}
     extra = {k: v for k, v in data.items() if k not in known_keys}
 
-    return TmConfig(active_workflow=active_workflow, extra=extra)
+    return WfConfig(active_workflow=active_workflow, extra=extra)
 
 
-def save_config(config: TmConfig) -> None:
-    """Save config to .tm.json file."""
+def save_config(config: WfConfig) -> None:
+    """Save config to .wf.json file."""
     config_path = get_config_path()
 
     data: dict = {}

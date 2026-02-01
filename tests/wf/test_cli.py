@@ -1,4 +1,4 @@
-"""Tests for tm.cli module."""
+"""Tests for wf.cli module."""
 
 import json
 import os
@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from tm.cli import (
+from wf.cli import (
     CloseCmd,
     ReadyCmd,
     ResetCmd,
@@ -16,7 +16,7 @@ from tm.cli import (
     handle_ready,
     handle_reset,
 )
-from tm.config import CONFIG_FILENAME
+from wf.config import CONFIG_FILENAME
 
 
 @pytest.fixture
