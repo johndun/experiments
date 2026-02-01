@@ -174,3 +174,167 @@ class TestGenerateImages:
 
         assert nested_dir.exists()
         assert output_path.exists()
+
+    def test_aspect_ratio_passed_to_api(self, tmp_path):
+        with (
+            patch("nano_banana.generator.genai.Client") as mock_client_cls,
+            patch("nano_banana.generator.genai.types") as mock_types,
+        ):
+            mock_client = MagicMock()
+            mock_client_cls.return_value = mock_client
+
+            mock_part = MagicMock()
+            mock_part.inline_data = MagicMock()
+            mock_part.inline_data.data = create_test_image_bytes()
+            mock_part.text = None
+
+            mock_response = MagicMock()
+            mock_response.candidates = [MagicMock()]
+            mock_response.candidates[0].content.parts = [mock_part]
+            mock_client.models.generate_content.return_value = mock_response
+
+            output_path = tmp_path / "test.png"
+            args = NanoBananaArgs(
+                prompt="test",
+                out=output_path,
+                api_key="test-key",
+                aspect_ratio="16:9",
+            )
+
+            generate_images(args)
+
+            mock_types.ImageConfig.assert_called_once_with(
+                aspect_ratio="16:9",
+                image_size=None,
+            )
+
+    def test_image_size_passed_to_api(self, tmp_path):
+        with (
+            patch("nano_banana.generator.genai.Client") as mock_client_cls,
+            patch("nano_banana.generator.genai.types") as mock_types,
+        ):
+            mock_client = MagicMock()
+            mock_client_cls.return_value = mock_client
+
+            mock_part = MagicMock()
+            mock_part.inline_data = MagicMock()
+            mock_part.inline_data.data = create_test_image_bytes()
+            mock_part.text = None
+
+            mock_response = MagicMock()
+            mock_response.candidates = [MagicMock()]
+            mock_response.candidates[0].content.parts = [mock_part]
+            mock_client.models.generate_content.return_value = mock_response
+
+            output_path = tmp_path / "test.png"
+            args = NanoBananaArgs(
+                prompt="test",
+                out=output_path,
+                api_key="test-key",
+                image_size="2K",
+            )
+
+            generate_images(args)
+
+            mock_types.ImageConfig.assert_called_once_with(
+                aspect_ratio=None,
+                image_size="2K",
+            )
+
+    def test_aspect_ratio_and_image_size_passed_to_api(self, tmp_path):
+        with (
+            patch("nano_banana.generator.genai.Client") as mock_client_cls,
+            patch("nano_banana.generator.genai.types") as mock_types,
+        ):
+            mock_client = MagicMock()
+            mock_client_cls.return_value = mock_client
+
+            mock_part = MagicMock()
+            mock_part.inline_data = MagicMock()
+            mock_part.inline_data.data = create_test_image_bytes()
+            mock_part.text = None
+
+            mock_response = MagicMock()
+            mock_response.candidates = [MagicMock()]
+            mock_response.candidates[0].content.parts = [mock_part]
+            mock_client.models.generate_content.return_value = mock_response
+
+            output_path = tmp_path / "test.png"
+            args = NanoBananaArgs(
+                prompt="test",
+                out=output_path,
+                api_key="test-key",
+                aspect_ratio="3:4",
+                image_size="4K",
+            )
+
+            generate_images(args)
+
+            mock_types.ImageConfig.assert_called_once_with(
+                aspect_ratio="3:4",
+                image_size="4K",
+            )
+
+    def test_no_image_config_when_no_options(self, tmp_path, mock_client):
+        output_path = tmp_path / "test.png"
+        args = NanoBananaArgs(
+            prompt="test",
+            out=output_path,
+            api_key="test-key",
+        )
+
+        generate_images(args)
+
+        call_args = mock_client.models.generate_content.call_args
+        config = call_args.kwargs["config"]
+        assert config.image_config is None
+
+    def test_input_images_passed_to_api(self, tmp_path, mock_client):
+        # Create test input images
+        input_image1 = tmp_path / "input1.png"
+        input_image2 = tmp_path / "input2.jpg"
+        img = Image.new("RGB", (10, 10), color="blue")
+        img.save(input_image1, format="PNG")
+        img.save(input_image2, format="JPEG")
+
+        output_path = tmp_path / "output.png"
+        args = NanoBananaArgs(
+            prompt="Combine these images",
+            images=(input_image1, input_image2),
+            out=output_path,
+            api_key="test-key",
+        )
+
+        with patch("nano_banana.generator.genai.types") as mock_types:
+            mock_types.ImageConfig.return_value = None
+            mock_types.GenerateContentConfig.return_value = MagicMock()
+            mock_part = MagicMock()
+            mock_types.Part.from_bytes.return_value = mock_part
+
+            generate_images(args)
+
+            # Verify Part.from_bytes was called for each input image
+            assert mock_types.Part.from_bytes.call_count == 2
+
+            # Verify contents include the image parts and prompt
+            call_args = mock_client.models.generate_content.call_args
+            contents = call_args.kwargs["contents"]
+            assert len(contents) == 3  # 2 images + 1 prompt
+            assert contents[0] == mock_part
+            assert contents[1] == mock_part
+            assert contents[2] == "Combine these images"
+
+    def test_no_input_images_uses_prompt_only(self, tmp_path, mock_client):
+        output_path = tmp_path / "test.png"
+        args = NanoBananaArgs(
+            prompt="A simple prompt",
+            out=output_path,
+            api_key="test-key",
+        )
+
+        generate_images(args)
+
+        call_args = mock_client.models.generate_content.call_args
+        contents = call_args.kwargs["contents"]
+        # Should be a list with just the prompt string
+        assert contents == ["A simple prompt"]

@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import io
 import json
+import mimetypes
+from pathlib import Path
 from typing import TYPE_CHECKING
 
 from google import genai
@@ -13,6 +15,25 @@ from nano_banana.utils import ensure_parent_dir, get_image_format, pick_output_p
 
 if TYPE_CHECKING:
     from nano_banana.cli import NanoBananaArgs
+
+
+def load_image_as_part(image_path: Path) -> genai.types.Part:
+    """Load an image file and return it as a Gemini Part.
+
+    Args:
+        image_path: Path to the image file.
+
+    Returns:
+        A Gemini Part containing the image data.
+    """
+    mime_type, _ = mimetypes.guess_type(str(image_path))
+    if mime_type is None:
+        mime_type = "image/png"
+
+    with open(image_path, "rb") as f:
+        image_data = f.read()
+
+    return genai.types.Part.from_bytes(data=image_data, mime_type=mime_type)
 
 
 def generate_images(args: NanoBananaArgs) -> list[str]:
@@ -34,15 +55,29 @@ def generate_images(args: NanoBananaArgs) -> list[str]:
 
     client = genai.Client(api_key=args.api_key)
 
+    # Build content parts: input images first, then the text prompt
+    content_parts: list[genai.types.Part | str] = []
+    for image_path in args.images:
+        content_parts.append(load_image_as_part(image_path))
+    content_parts.append(args.prompt)
+
     saved_paths: list[str] = []
     text_responses: list[str] = []
 
     for i, output_path in enumerate(output_paths):
+        image_config = None
+        if args.aspect_ratio is not None or args.image_size is not None:
+            image_config = genai.types.ImageConfig(
+                aspect_ratio=args.aspect_ratio,
+                image_size=args.image_size,
+            )
+
         response = client.models.generate_content(
             model=args.model,
-            contents=args.prompt,
+            contents=content_parts,
             config=genai.types.GenerateContentConfig(
                 response_modalities=["image", "text"],
+                image_config=image_config,
             ),
         )
 
