@@ -107,6 +107,8 @@ def handle_ready(cmd: ReadyCmd) -> int:
     # Set as active workflow
     set_active_workflow(workflow_path)
 
+    print(f"Active workflow: {workflow_path}")
+    print()
     print_ready_tasks(workflow_path)
     return 0
 
@@ -171,7 +173,8 @@ def handle_close(cmd: CloseCmd) -> int:
     auto_closed_stories = close_tasks(workflow, task_ids)
     save_workflow(workflow, workflow_path)
 
-    # Print what was closed
+    # Print active workflow and what was closed
+    print(f"Active workflow: {workflow_path}")
     print(f"Closed tasks: {', '.join(task_ids)}")
     if auto_closed_stories:
         print(f"Completed stories: {', '.join(auto_closed_stories)}")

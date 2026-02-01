@@ -94,6 +94,14 @@ class TestHandleReady:
         assert "[task1]" in captured.out
         assert "[task4]" in captured.out
 
+    def test_ready_shows_active_workflow(self, temp_dir, sample_workflow_file, capsys):
+        """Test that ready shows active workflow path."""
+        cmd = ReadyCmd(workflow=sample_workflow_file)
+        handle_ready(cmd)
+
+        captured = capsys.readouterr()
+        assert f"Active workflow: {sample_workflow_file}" in captured.out
+
     def test_ready_sets_active_workflow(self, temp_dir, sample_workflow_file):
         """Test that ready sets active workflow."""
         cmd = ReadyCmd(workflow=sample_workflow_file)
@@ -244,6 +252,19 @@ class TestHandleClose:
         assert "Closed tasks: task1" in captured.out
         assert "[task2]" in captured.out  # Now ready
         assert "[task3]" in captured.out  # Now ready
+
+    def test_close_shows_active_workflow(self, temp_dir, sample_workflow_file, capsys):
+        """Test that close shows active workflow path."""
+        config_path = temp_dir / CONFIG_FILENAME
+        config_path.write_text(
+            json.dumps({"active_workflow": str(sample_workflow_file)})
+        )
+
+        cmd = CloseCmd(task_ids=("task1",))
+        handle_close(cmd)
+
+        captured = capsys.readouterr()
+        assert f"Active workflow: {sample_workflow_file}" in captured.out
 
     def test_close_multiple_tasks(self, temp_dir, sample_workflow_file, capsys):
         """Test closing multiple tasks."""
