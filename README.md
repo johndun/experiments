@@ -22,6 +22,18 @@ source .venv/bin/activate
 uv pip install -e ".[dev]"
 ```
 
+### Install Claude Code Skills
+
+To make the skills from this repo available globally in Claude Code, copy them to your user skills directory:
+
+```bash
+# Create the skills directory if it doesn't exist
+mkdir -p ~/.claude/skills
+
+# Copy all skills from this repo
+cp -r .claude/skills/* ~/.claude/skills/
+```
+
 ## Development
 
 ### Linting and Formatting
