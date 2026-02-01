@@ -18,6 +18,7 @@ nano_banana "<prompt>" [options]
 | Argument | Alias | Description |
 |----------|-------|-------------|
 | `prompt` | (positional) | The prompt describing the image to generate (required) |
+| `--images` | `-i` | Input image paths to include with the prompt (can be repeated) |
 | `--out` | `-o` | Output file path (for single image) |
 | `--out-dir` | | Output directory (for multiple images) |
 | `--n` | `-n` | Number of images to generate (default: 1) |
@@ -69,6 +70,21 @@ nano_banana "Abstract art pattern" -o social.png -a 1:1 -s 2K
 ### Get JSON output
 ```bash
 nano_banana "test prompt" --out result.png --json
+```
+
+### Edit an existing image
+```bash
+nano_banana "Make this photo black and white" -i photo.jpg -o bw-photo.png
+```
+
+### Combine multiple images
+```bash
+nano_banana "Create a collage from these images" -i img1.png -i img2.png -i img3.png -o collage.png
+```
+
+### Style transfer from reference image
+```bash
+nano_banana "Apply the style of this painting to my photo" -i painting.jpg -i photo.jpg -o styled.png
 ```
 
 ## Environment
